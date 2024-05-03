@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Todo App</title>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <style>
+      .container {
+        margin-top: 50px;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/">TODO App</a>
+        <a class="navbar-brand" id="listButton" href="{% url "list" %}">Todo List</a>
+
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div
+          class="collapse navbar-collapse justify-content-end"
+          id="navbarSupportedContent"
+        >
+        
+          <form action="{% url "user_login" %}" >
+            <button
+              id="loginButton"
+              class="btn btn-outline-success m-2"
+              type="submit"
+            >
+              Login
+            </button>
+          </form>
+          <form action="{% url "register" %}">
+            <button
+              id="signupButton"
+              class="btn btn-outline-primary m-2"
+              type="submit"
+            >
+              Sign Up
+            </button>
+          </form>
+          
+          <form action="">
+            <button
+              id="logoutButton"
+              class="btn btn-outline-danger m-2"
+              type="submit"
+            >
+              Logout
+            </button>
+          </form>
+
+         
+        </div>
+      </div>
+    </nav>
+
+    {% comment %} login form {% endcomment %}
+      <section class="gradient-custom">
+      <div class="container py-5">
+        <div class="row d-flex justify-content-center align-items-center">
+          <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+            <div class="card bg-dark text-white" style="border-radius: 1rem">
+              <div class="card-body p-5 text-center">
+                <div class="mb-md-5 mt-md-4 pb-5">
+                  <h2 class="fw-bold mb-2 text-uppercase">Login</h2>
+                  <p class="text-white-50 mb-5">
+                    Please enter your username and password!
+                  </p>
+                  <form onsubmit="handleLogin(event)">
+                    {% csrf_token %}
+                    
+                  <div data-mdb-input-init class="form-outline form-white mb-4">
+                    <label class="form-label" for="login-username">Username</label>
+                    <input
+                      type="text"
+                      id="login-username"
+                      class="form-control form-control-lg"
+                    />
+                  </div>
+
+                  <div data-mdb-input-init class="form-outline form-white mb-4">
+                    <label class="form-label" for="login-password"
+                      >Password</label
+                    >
+                    <input
+                      type="password"
+                      id="login-password"
+                      class="form-control form-control-lg"
+                    />
+                  </div>
+
+                  <button
+                    class="btn btn-outline-light btn-lg px-5"
+                    type="submit"
+                  >
+                    Login
+                  </button>
+
+                </div>
+
+                <div>
+                  <p class="mb-0">
+                    Don't have an account?
+                    <a href="{% url "register" %}" class="text-white-50 fw-bold"
+                      >Sign Up</a
+                    >
+                  </p>
+                </div>
+                  </form>
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+
+    <script>
+      const getValue = (id) => {
+        const value = document.getElementById(id).value;
+        return value;
+      };
+
+      const handleLogin = (event) => {
+        event.preventDefault();
+        const username = getValue('login-username');
+        const password = getValue('login-password');
+        const info ={
+          "username" : username,
+          "password" : password
+        }
+       
+        if ((username, password)) {
+          fetch('http://127.0.0.1:8000/clients/login/', {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify(info),
+          })
+            .then((res) => {
+              if(res.ok){
+                alert("User Logged In");
+                return res.json();
+              }
+              else{
+                alert("Something Went wrong!");
+              }
+            })
+            .then((data) => {
+              if (data.token && data.user_id) {
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('user_id', data.user_id);
+                window.location.href = '/list';
+              }
+            });
+        }
+      };
+
+      const renderNavbar = () => {
+        const token = localStorage.getItem('token');
+
+        if (token) {
+          // User is logged in
+          document.getElementById('loginButton').style.display = 'none';
+          document.getElementById('signupButton').style.display = 'none';
+          document.getElementById('logoutButton').style.display = 'inline-block';
+          document.getElementById('listButton').style.display = 'inline-block';
+        } else {
+          // User is not logged in
+          document.getElementById('loginButton').style.display = 'inline-block';
+          document.getElementById('signupButton').style.display = 'inline-block';
+          document.getElementById('logoutButton').style.display = 'none';
+          document.getElementById('listButton').style.display = 'none';
+        }
+    };
+    window.onload = renderNavbar;
+    </script>
+  </body>
+</html>
