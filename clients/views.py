@@ -48,9 +48,7 @@ class UserLoginAPIView(APIView):
 class UserLogoutAPIView(APIView):
     def get(self, request):
         logout(request)
-        response = JsonResponse({"message": "Logged out successfully"})
-        response.delete_cookie('sessionid')
-        return response
+        return Response('Logged Out successfully')
     
 
 
