@@ -184,7 +184,7 @@
          }
          if (password === confirm_password) {
             if (/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/.test(password)) {
-            fetch('http://127.0.0.1:8000/clients/signup/', {
+            fetch('https://drf-todo-app.onrender.com/clients/signup/', {
                 method: 'POST',
                 headers: { 'content-type': 'application/json' },
                 body: JSON.stringify(info),
@@ -216,7 +216,7 @@
         const handlelogOut = () => {
         const token = localStorage.getItem('token');
 
-        fetch('http://127.0.0.1:8000/clients/logout/', {
+        fetch('https://drf-todo-app.onrender.com/clients/logout/', {
           method: 'POST',
           headers: {
             Authorization: `Token ${token}`,

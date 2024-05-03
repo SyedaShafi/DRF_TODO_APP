@@ -147,7 +147,7 @@
       function buildList() {
         var wrapper = document.getElementById('list-wrapper');
         wrapper.innerHTML = '';
-        var url = 'http://127.0.0.1:8000/apis/task-list/';
+        var url = 'https://drf-todo-app.onrender.com/apis/task-list/';
         fetch(url)
           .then((res) => res.json())
           .then((tasks) => {
@@ -215,9 +215,9 @@
       var form = document.getElementById('taskForm');
       form.addEventListener('submit', function (event) {
         event.preventDefault();
-        var url = 'http://127.0.0.1:8000/apis/add-task/';
+        var url = 'https://drf-todo-app.onrender.com/apis/add-task/';
         if (activeItem != null) {
-          var url = `http://127.0.0.1:8000/apis/update-task/${activeItem.id}/`;
+          var url = `https://drf-todo-app.onrender.com/apis/update-task/${activeItem.id}/`;
           activeItem = null;
         }
 
@@ -246,7 +246,7 @@
       }
 
       function deleteTask(item) {
-        var url = `http://127.0.0.1:8000/apis/delete-task/${item.id}/`;
+        var url = `https://drf-todo-app.onrender.com/apis/delete-task/${item.id}/`;
         fetch(url, {
           method: 'DELETE',
           headers: {
@@ -262,7 +262,7 @@
         console.log('strikeUnstrike');
         console.log(item.user);
         item.completed = !item.completed;
-        var url = `http://127.0.0.1:8000/apis/update-task/${item.id}/`;
+        var url = `https://drf-todo-app.onrender.com/apis/update-task/${item.id}/`;
         fetch(url, {
           method: 'POST',
           headers: {
@@ -282,7 +282,7 @@
       const handlelogOut = () => {
         const token = localStorage.getItem('token');
 
-        fetch('http://127.0.0.1:8000/clients/logout/', {
+        fetch('https://drf-todo-app.onrender.com/clients/logout/', {
           method: 'POST',
           headers: {
             Authorization: `Token ${token}`,

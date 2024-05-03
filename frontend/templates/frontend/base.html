@@ -101,7 +101,7 @@
       const handlelogOut = () => {
         const token = localStorage.getItem('token');
 
-        fetch('http://127.0.0.1:8000/clients/logout/', {
+        fetch('https://drf-todo-app.onrender.com/clients/logout/', {
           method: 'POST',
           headers: {
             Authorization: `Token ${token}`,
