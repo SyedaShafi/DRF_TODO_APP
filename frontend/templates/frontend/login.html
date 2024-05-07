@@ -166,7 +166,6 @@
           })
             .then((res) => {
               if(res.ok){
-                alert("User Logged In");
                 return res.json();
               }
               else{
@@ -177,7 +176,11 @@
               if (data.token && data.user_id) {
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('user_id', data.user_id);
-                window.location.href = '/list';
+                window.location.href = '{% url "list" %}';
+                alert("User Logged In");
+              }
+              else{
+                alert('User is not activated.')
               }
             });
         }

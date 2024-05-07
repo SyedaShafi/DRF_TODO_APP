@@ -58,7 +58,7 @@
             </button>
           </form>
         
-          <form action="" onsubmit("handlelogOut()")>
+          <form action="" onsubmit = "handlelogOut()">
             <button
               id="logoutButton"
               class="btn btn-outline-danger m-2"
@@ -102,7 +102,7 @@
         const token = localStorage.getItem('token');
 
         fetch('https://drf-todo-app.onrender.com/clients/logout/', {
-          method: 'POST',
+          method: 'GET',
           headers: {
             Authorization: `Token ${token}`,
             'Content-Type': 'application/json',

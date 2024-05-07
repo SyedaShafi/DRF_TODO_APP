@@ -191,7 +191,7 @@
             })
                 .then((res) =>{
                     if(res.ok){
-                        alert("User registered successfully")
+                        alert("User registered successfully. Please Check Email For Activation")
                         return res.json()
                     }
                     else{
@@ -217,7 +217,7 @@
         const token = localStorage.getItem('token');
 
         fetch('https://drf-todo-app.onrender.com/clients/logout/', {
-          method: 'POST',
+          method: 'GET',
           headers: {
             Authorization: `Token ${token}`,
             'Content-Type': 'application/json',

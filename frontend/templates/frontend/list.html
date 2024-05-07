@@ -93,27 +93,67 @@
         <div class="col-md-6">
           <div class="card">
             <div class="card-header bg-primary text-white">
-              <h5 class="mb-0">Add Task</h5>
+              <h5 class="mb-4">Add Task</h5>
+
+              <div class="mb-2">
+                <label for="sortData" class="sr-only">Sort Task</label>
+                <select class="form-control" id="sortData" required>
+                  <option value="" disabled selected>Sort Task</option>
+                  <option value="priority-asc">Priority Ascending</option>
+                  <option value="priority-des">Priority Descending</option>
+                  <option value="due_date-asc"> Due Date Ascending</option>
+                  <option value="due_date-des"> Due Date Descending</option>
+                  <option value="todo"> Todo</option>
+                  <option value="completed"> Completed</option>
+                </select>
+              </div>
+
             </div>
             <div class="card-body" id="wrapper">
               <form id="taskForm" class="row sticky">
-                {% csrf_token %}
-                <div class="col-md-8 mb-2">
-                  <label for="taskName" class="sr-only">Task Name</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="taskName"
-                    placeholder="Enter task name"
-                    required
-                  />
-                </div>
-                <div class="col-md-4">
-                  <button type="submit" class="btn btn-success btn-block">
-                    Add Task
-                  </button>
-                </div>
-              </form>
+              {% csrf_token %}
+              <div class="col-md-12 mb-2">
+                <label for="taskName" class="sr-only">Task Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="taskName"
+                  placeholder="Enter task name"
+                  required
+                />
+              </div>
+              <div class="col-md-6 mb-2">
+                <label for="taskDate" class="sr-only">Task Date</label>
+                <input
+                  type="date"
+                  class="form-control"
+                  id="taskDate"
+                  placeholder="Select task date"
+                  required
+                />
+              </div>
+              <div class="col-md-6 mb-2">
+                <label for="taskPriority" class="sr-only">Task Priority</label>
+                <select class="form-control" id="taskPriority" required>
+                  <option value="" disabled selected>Priority</option>
+                  <option value="0">0</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                  <option value="7">7</option>
+                  <option value="8">8</option>
+                </select>
+              </div>
+              <div class="col-md-12">
+                <button type="submit" class="btn btn-success btn-block">
+                  Add Task
+                </button>
+              </div>
+            </form>
+           
 
               <div id="list-wrapper"></div>
             </div>
@@ -140,19 +180,23 @@
           return cookieValue;
       }
 
+       
 
       activeItem = null;
       var userId = localStorage.getItem('user_id');
 
-      function buildList() {
-        var wrapper = document.getElementById('list-wrapper');
-        wrapper.innerHTML = '';
-        var url = 'https://drf-todo-app.onrender.com/apis/task-list/';
-        fetch(url)
+      document.getElementById('sortData').addEventListener('change', function () {
+         var wrapper = document.getElementById('list-wrapper');
+          wrapper.innerHTML = '';
+          var selectedOption = this.value;
+          url = 'https://drf-todo-app.onrender.com/apis/task-list/';
+          if (selectedOption) {
+              url += `?sort_by=${selectedOption}`; 
+            }
+            console.log(url)
+           fetch(url)
           .then((res) => res.json())
-          .then((tasks) => {
-            console.log(tasks)
-            const data = tasks.filter(task => task.user == userId);
+          .then((data) => {          
             console.log(data)
             for (var i in data) {
               var title = `<span class="card-title title">${data[i].title}</span>`;
@@ -161,10 +205,91 @@
               }
               var item = `
                  <div class="card my-2 card-bg">
-                     <div class="card-body d-flex flex-wrap justify-content-between">
+                     <div class="card-body">
                           <div id = "item-${i}">
-                            ${title}
+                           Title:  ${title}
                           </div>
+                          <div>
+                            Due Date: ${data[i].due_date}
+                          </div> 
+                          <div>
+                            Priority: ${data[i].priority}
+                          </div> 
+                          <div class="text-start">
+                            <span class="btn btn-sm btn-primary update">Update</span>
+                            <span class="btn btn-sm btn-danger delete">Delete</span>
+                          </div>
+                     </div>
+                 </div>
+                 `;
+              wrapper.innerHTML += item;
+            }
+
+            for (var i in data) {
+              var updateBtn = document.getElementsByClassName('update')[i];
+              var deleteBtn = document.getElementsByClassName('delete')[i];
+              var title = document.getElementsByClassName('title')[i];
+
+              updateBtn.addEventListener(
+                'click',
+                (function (item) {
+                  return function () {
+                    updateTask(item);
+                  };
+                })(data[i])
+              );
+
+              deleteBtn.addEventListener(
+                'click',
+                (function (item) {
+                  return function () {
+                    deleteTask(item);
+                  };
+                })(data[i])
+              );
+
+              title.addEventListener(
+                'click',
+                (function (item) {
+                  return function () {
+                    strikeUnstrike(item);
+                  };
+                })(data[i])
+              );
+            }
+          });
+        });
+
+
+
+
+      function buildList() {
+        var wrapper = document.getElementById('list-wrapper');
+        wrapper.innerHTML = '';
+        let url = 'https://drf-todo-app.onrender.com/apis/task-list/';
+
+            
+          fetch(url)
+          .then((res) => res.json())
+          .then((data) => {          
+            console.log(data)
+            for (var i in data) {
+              var title = `<span class="card-title title">${data[i].title}</span>`;
+              if (data[i].completed == true) {
+                title = `<strike class="card-title title">${data[i].title}</strike>`;
+              }
+              var item = `
+                 <div class="card my-2 card-bg">
+                     <div class="card-body">
+                          <div id = "item-${i}">
+                           Title:  ${title}
+                          </div>
+                          <div>
+                            Due Date: ${data[i].due_date}
+                          </div> 
+                          <div>
+                            Priority: ${data[i].priority}
+                          </div> 
                           <div class="text-start">
                             <span class="btn btn-sm btn-primary update">Update</span>
                             <span class="btn btn-sm btn-danger delete">Delete</span>
@@ -222,8 +347,12 @@
         }
 
         var title = document.getElementById('taskName').value;
+        var due_date = document.getElementById('taskDate').value;
+        var priority = document.getElementById('taskPriority').value;
         var requestBody = {
             "title": title,
+            "due_date":due_date,
+            "priority":priority,
             "user": userId
           };
         fetch(url, {
@@ -234,7 +363,7 @@
           },
           body: JSON.stringify(requestBody),
         }).then(function (response) {
-
+          console.log(response.json().data)
           buildList();
           document.getElementById('taskForm').reset();
         });
@@ -243,6 +372,8 @@
       function updateTask(item) {
         activeItem = item;
         document.getElementById('taskName').value = activeItem.title;
+        document.getElementById('taskDate').value = activeItem.due_date;
+        document.getElementById('taskPriority').value = activeItem.priority;
       }
 
       function deleteTask(item) {
@@ -272,6 +403,8 @@
           body: JSON.stringify({
             user: item.user,
             title: item.title,
+            due_date: item.due_date,
+            priority: item.priority,
             completed: item.completed,
           }),
         }).then((res) => {
@@ -282,7 +415,7 @@
       const handlelogOut = () => {
         var token = localStorage.getItem('token');
         fetch('https://drf-todo-app.onrender.com/clients/logout/', {
-          method: 'POST',
+          method: 'GET',
           headers: {
             Authorization: `Token ${token}`,
             'Content-Type': 'application/json',
@@ -290,8 +423,6 @@
         })
           .then((res) => res.json())
           .then((data) => {
-            console.log("logout")
-            console.log(token)
             alert("Logged Out Successfully!")
             localStorage.removeItem('token');
             localStorage.removeItem('user_id');

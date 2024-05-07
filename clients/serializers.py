@@ -28,6 +28,7 @@ class UserSerializer(serializers.ModelSerializer):
     
         account = User.objects.create(username = username, email = email)
         account.set_password(password)
+        account.is_active = False
         account.save()
         return account
     

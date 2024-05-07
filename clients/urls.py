@@ -12,6 +12,7 @@ urlpatterns = [
     path('', include(router.urls)),
     path('login/', views.UserLoginAPIView.as_view(), name='login'),
     path('signup/', views.UserRegistrationAPIView.as_view(), name='signup'),
-    path('logout/', views.UserLogoutAPIView.as_view(), name='logout'),
+    path('logout/', views.UserLogoutAPIView, name='logout'),
+    path('active/<uid64>/<token>/', views.activate, name = 'activate'),
    
 ]
