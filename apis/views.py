@@ -25,7 +25,8 @@ def taskList(request):
     sort_by =  request.query_params.get('sort_by')
   
     tasks = Task.objects.filter(user=request.user)
-
+    tasks = tasks.order_by('-id')
+    
     if sort_by == 'priority-des':
         tasks = tasks.order_by('-priority')
 

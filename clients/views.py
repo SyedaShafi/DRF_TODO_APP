@@ -76,7 +76,7 @@ class UserLoginAPIView(APIView):
 #         logout(request)
 #         return Response("User logged out")
 
-@api_view(['GET'])
+@api_view(['POST'])
 def UserLogoutAPIView(request):
     logout(request)
     return Response('User Logged Out.')
