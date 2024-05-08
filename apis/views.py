@@ -44,7 +44,6 @@ def taskList(request):
     elif sort_by == 'completed':
         tasks = Task.objects.filter(completed=True, user=request.user)
 
-    print(sort_by)
     serializer = TaskSerializer(tasks, many=True)
     return Response(serializer.data)
 
@@ -62,7 +61,7 @@ def addTask(request):
     if serializer.is_valid():
         user = serializer.save()
         email_subject = "Task Added"
-        email_body = render_to_string('taskAdded_mail.html')
+        email_body = render_to_string('taskAdded_mail.html', {'task': user})
         email = EmailMultiAlternatives(email_subject, '', to=[user.user.email])
         email.attach_alternative(email_body, "text/html")
         email.send()
@@ -84,7 +83,7 @@ def updateTask(request, pk):
         user = serializer.save()
         if user.completed:
             email_subject = "Task Completed"
-            email_body = render_to_string('taskCompleted_mail.html')
+            email_body = render_to_string('taskCompleted_mail.html', {'task': user})
             email = EmailMultiAlternatives(email_subject, '', to=[user.user.email])
             email.attach_alternative(email_body, "text/html")
             email.send() 
