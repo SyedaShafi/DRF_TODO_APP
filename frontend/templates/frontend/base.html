@@ -56,7 +56,34 @@
         
       }
 
-  
+      .y-box{
+        border:none;
+        padding: 20px 30px;
+        background: #F9E5D3;
+        width: 80%;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        transition: all 0.4s ease;
+      }
+       .y-box:hover{
+        transform: scale(0.9);
+        background:  #c3ac91;
+       }
+
+      .g-box{
+        border:none;
+        padding: 20px 30px;
+        background: #c3ac91;
+        width: 80%;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        transition: all 0.4s ease;
+      }
+      .g-box:hover{
+        transform: scale(0.9);
+        background: #F9E5D3;
+       }
+         
 
     </style>
   </head>
@@ -128,46 +155,56 @@
 
     <div class="container-fluid row" id="backgroundContainer">
       <div class="col-md-12 d-flex text-center justify-content-center align-items-center">
-        <strong> MyTodo is a simple yet powerful todo list application designed to help users organize their tasks efficiently. Whether you're managing daily chores, or work assignments. MyTodo provides a user-friendly interface to keep track of all your tasks in one place.</strong>
+       <div class="welcome-text">
+        <h1>Welcome</h1>
+        <h6>To</h6>
+        <div  class="text-center p-3">
+          <span class="rounded" style="background: #c3ac91; font-size:24px; font-weight: 900; padding:10px; ">MyTodo</span>
+        </div>
+        <span style="font-size:20px; ">Arrange your task more efficiently & effectively.</span>
+        <br>
+        <br>
+        {% if user.is_authenticated %}
+         <a href="{% url "list" %}" class="btn btn-primary">Explore Tasks</a>
+        {% else %}
+        <a href="{% url "register" %}" style="font-weight: 500; font-size:24px; border-radius:15px; background:#354F52;" class="btn m-2 p-3 text-white">Signup Now!</a>
+        {% endif %}
+       </div>
       </div>
     </div>
 
 
     <div class="container-fluid row justify-content-center align-items-center">
-      <div class="col-md-6 text-start">
+      <div class="col-md-8 text-center p-3">
 
-        <div class="ms-md-5">
+        <div class="ms-md-5 p-5">
 
-          <h1>
-            Key Features:
-   
+          <h1 class="text-center pb-4" style="width: 80%">
+            Key Features
           </h1> 
-          <p><strong>1. Task Management:</strong> Create, edit, and delete tasks effortlessly. Each task can have a title, description, due date, priority, and status (completed or pending). </p>
-          <p>
-           <strong>2. Priority Levels:</strong>  Set task priority levels to focus on high-priority tasks and manage time effectively.
-          </p>
-          <p>
-           <strong>3. Due Dates:</strong> Assign due dates to tasks to ensure timely completion.
-          </p>
-          <p>
-           <strong>4. Sorting Options:</strong> Enable users to sort tasks by due date, priority, completion status, etc., enhancing usability and organization.
-          </p>
-          <p>
-           <strong>5.Task Update and Deletion:</strong> Modify task details and delete tasks as needed for flexible task management.
-          </p>
-          <p>
-           <strong>6.Email Notifications:</strong> Receive email confirmations upon task creation and completion, enhancing engagement and keeping users informed.
-          </p>
+          <div class="y-box">
+           Create, edit, and delete tasks effortlessly. 
+          </div>
+          <div class="g-box">
+          Set task priority levels to focus on high-priority tasks and manage time effectively.
+          </div>
+          <div class="y-box">
+           Modify task details and delete tasks. Receive email confirmations upon task creation and completion
+          </div>
+          <div class="g-box">
+            You can sort tasks by due date, priority, completion status, etc., enhancing usability and organization.
+          </div>
+        
 
         </div>
       </div>
 
 
-       <div class="col-md-6 text-center ">
+       <div class="col-md-4 text-center ">
          <img 
          src="{% static "key_feature.jpg" %}"  
          class="img-fluid rounded my-5"
-         style="width: 400px; margin: auto" alt=""
+         style="width: 300px; margin: auto" alt=""
          />
        </div>
     </div>
@@ -243,12 +280,10 @@
           <!-- Grid column -->
           <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
             <h6 class="text-uppercase mb-4 font-weight-bold">
-              Company name
+             MyTodo
             </h6>
             <p>
-              Here you can use rows and columns to organize your footer
-              content. Lorem ipsum dolor sit amet, consectetur adipisicing
-              elit.
+           Say goodbye to forgotten tasks and hello to a more organized, productive you. Let's dive in and explore the endless possibilities of task management!
             </p>
           </div>
           <!-- Grid column -->
@@ -259,16 +294,16 @@
           <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-3">
             <h6 class="text-uppercase mb-4 font-weight-bold">Products</h6>
             <p>
-              <a class="text-white">MDBootstrap</a>
+              <a class="text-white" style="text-decoration: none;">Product</a>
             </p>
             <p>
-              <a class="text-white">MDWordPress</a>
+              <a class="text-white" style="text-decoration: none;">Product</a>
             </p>
             <p>
-              <a class="text-white">BrandFlow</a>
+              <a class="text-white" style="text-decoration: none;">Product</a>
             </p>
             <p>
-              <a class="text-white">Bootstrap Angular</a>
+              <a class="text-white" style="text-decoration: none;">Product </a>
             </p>
           </div>
           <!-- Grid column -->
@@ -281,16 +316,16 @@
               Useful links
             </h6>
             <p>
-              <a class="text-white">Your Account</a>
+              <a class="text-white" style="text-decoration: none;">Your Account</a>
             </p>
             <p>
-              <a class="text-white">Become an Affiliate</a>
+              <a class="text-white" style="text-decoration: none;">Become an Affiliate</a>
             </p>
             <p>
-              <a class="text-white">Shipping Rates</a>
+              <a class="text-white" style="text-decoration: none;">Shipping Rates</a>
             </p>
             <p>
-              <a class="text-white">Help</a>
+              <a class="text-white" style="text-decoration: none;">Help</a>
             </p>
           </div>
 
@@ -300,10 +335,10 @@
           <!-- Grid column -->
           <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
             <h6 class="text-uppercase mb-4 font-weight-bold">Contact</h6>
-            <p><i class="fas fa-home mr-3"></i> New York, NY 10012, US</p>
-            <p><i class="fas fa-envelope mr-3"></i> info@gmail.com</p>
-            <p><i class="fas fa-phone mr-3"></i> + 01 234 567 88</p>
-            <p><i class="fas fa-print mr-3"></i> + 01 234 567 89</p>
+            <p><i class="bi bi-house"></i> Sylhet, BD</p>
+            <p><i class="bi bi-envelope mr-3"></i> syedashafi4@gmail.com</p>
+            <p><i class="bi bi-phone mr-3"></i> + 01 234 567 88</p>
+           
           </div>
           <!-- Grid column -->
         </div>
